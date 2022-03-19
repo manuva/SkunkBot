@@ -1,9 +1,12 @@
+*.suo
+.suo
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
-*.suo
+
 
 # C extensions
 *.so
