@@ -1,5 +1,6 @@
-#quick and dirty discord chatbot dedicated to a great human being -- updates to come, lots to do here
+#bot.py
 import os
+import secrets
 from re import X
 import discord
 from dotenv import load_dotenv
@@ -7,6 +8,7 @@ import random
 from discord.ext import commands
 import time
 import pandas
+import re
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -25,7 +27,6 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    #grab from sql todo
     skunkQuotes = [
         'I dono man',
         'I dono man',
@@ -67,12 +68,16 @@ async def on_message(message):
 	    'youtube is adding "fact checking" to world economic forum references',
         'makes you think about that guy that was on rogan',
         'people who have no clue what the wef is see that little snippet and they can change 90% of their minds over time',
-        'or some shit'
+        'or some shit',
+        'this is kind of interesting',
+        'trump canceled pelosi\'s trip to davos on the us taxpayers dime',
+        'back in 2019',
+        'Rick Rule''s VIRTUAL URANIUM Investors Bootcamp',
+        'its a saturday marathon'
     ]
     
-    #can prob do this with isalpha or regex todo 
-    triggerWords = ['a','b','c','d','e','f','g','h','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'
-    ]
+    #can do this with isalpha or regex 
+    triggerWords = re.compile('[a-zA-Z]')
         
     
     #generate a random number (1-5). that number will determine how many messages are sent per triggerword
@@ -81,36 +86,53 @@ async def on_message(message):
     #without bot prefix
     #only chat if instance is a DM channel initiated by the user
     if isinstance(message.channel, discord.DMChannel):
+
         #true if any words are from user and are in triggerwords 
-        if any (element in message.content for element in triggerWords):
+        #if any (element in message.content for element in triggerWords):
+        if triggerWords.search(message.content):
+            randomNumber = secrets.choice(range(1, 5))
+            print('random number is ', randomNumber)
+            msgCount = 0
+            while (msgCount < randomNumber):
+                response = random.choice(skunkQuotes)
+                async with message.channel.typing():
+                    time.sleep(secrets.choice(range(1,10)))
+                    await message.channel.send(response)
+                    msgCount += 1
+                    print('\n--message count is currently', msgCount)
+                    '''
             #store and make the response random
-            response = random.choice(skunkQuotes)
+            response = random.choice(rickQuotes)
             #indicate the bot is typing
             async with message.channel.typing():
                 time.sleep(5) #implement a small delay before sending message
                 await message.channel.send(response) #if all are true above, tell the user a random message
             async with message.channel.typing():
-                response=random.choice(skunkQuotes)
+                response=random.choice(rickQuotes)
                 time.sleep(3)
                 await message.channel.send(response)
             async with message.channel.typing():
-                response=random.choice(skunkQuotes)
+                response=random.choice(rickQuotes)
                 time.sleep(3)
                 await message.channel.send(response)
-
+'''
 '''
 @bot.command(name='hey', help='responds with a random quote')
 async def rick_message(ctx):
-    skunkQuotes = [
+    rickQuotes = [
         'i dono man',
         'why group when you can solo'
     ]
     
-    response = random.choice(skunkQuotes)
+    response = random.choice(rickQuotes)
     await ctx.send(response)
  '''
     
-    
+def randomizeMessageCount(number):
+    number = random.randint(1,5)
+    return number
+
+
     
 def reportBotInfo():
     '''for guild in client.guilds:
