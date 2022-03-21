@@ -81,7 +81,20 @@ async def on_message(message):
         'just peeped that video',
         'looks like theyre def gonna use peoples starlinks as some sort of mesh network around the jurisdiction',
         'so that shit dont even gotta jump from orbit to the vehicle it can jump from some dudes roof top if its closer',
-        'star link bout to be the next cyberdyne systems'
+        'star link bout to be the next cyberdyne systems',
+        'so',
+        'the dudes at the top already switched teams',
+        'but the dudes below them are trying to crash land the ship?',
+        'yea idk',
+        'was listening to some shit yesterday',
+        'these nigs were saying theres a beef between the old usa money',
+        'and the old euro money',
+        'the old euro money is the davos nigs with klaus schwab',
+        'the old usa money is the federal reserve nigs',
+        'and then theres the new money that came from old money bribes',
+        'and then theres the new money that came from new era hustlingputin is a new money new hustle guy',
+        'doesnt care about either old money nig',
+        'most of our politicians are new money from old money bribes'
 
     ]
     
