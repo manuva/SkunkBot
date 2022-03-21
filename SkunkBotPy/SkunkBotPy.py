@@ -19,23 +19,25 @@ GUILD = os.getenv('DISCORD_GUILD')
 CONN = pyodbc.connect(os.getenv('SQL_CONNECTION_STRING'))
 
 cursor = CONN.cursor()
-
-
-
-
-
 bot = commands.Bot(command_prefix="!")
-
 client = discord.Client()
 
+## EVENTS ##
 @client.event
 async def on_ready():
     reportBotInfo()
     
 @client.event
 async def on_message(message):
+    await SendRandomQuote(message)
+    
+    
+    
+
+## FUNCTIONS ##   
+async def SendRandomQuote(message):
     if message.author == client.user:
-        return
+            return
     
     #select sql data
     skunkQuotes = cursor.execute('SELECT quote_text FROM Quotes').fetchall()
@@ -79,7 +81,26 @@ async def on_message(message):
                 response=random.choice(skunkQuotes)
                 time.sleep(3)
                 await message.channel.send(response)
-'''
+'''    
+    
+def reportBotInfo():
+    '''for guild in client.guilds:
+        if guild.name == GUILD:
+            break'''
+    guild = discord.utils.get(client.guilds, name=GUILD)
+        
+    print(
+        f'{client.user} is connected to the following guild:\n'
+        f'{guild.name}(id: {guild.id})'
+        f"\n  ____  _                _    ____        _"
+        f"\n / ___|| | ___   _ _ __ | | _| __ )  ___ | |_ "
+        f"\n \___ \| |/ / | | | '_ \| |/ /  _ \ / _ \| __|"
+        f"\n  ___) |   <| |_| | | | |   <| |_) | (_) | |_ "
+        f"\n |____/|_|\_\\\__,_|_| |_|_|\_\____/ \___/ \__|"
+    )
+    
+ 
+
 '''
 @bot.command(name='hey', help='responds with a random quote')
 async def skunk_message(ctx):
@@ -93,18 +114,14 @@ async def skunk_message(ctx):
  '''
 
     
-def reportBotInfo():
-    '''for guild in client.guilds:
-        if guild.name == GUILD:
-            break'''
-    guild = discord.utils.get(client.guilds, name=GUILD)
-        
-    print(
-        f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})'
-    )
-    
-    
+   
+
+   
+
+
+
+
+                                              
 
     
 
