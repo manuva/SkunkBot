@@ -73,7 +73,16 @@ async def on_message(message):
         'trump canceled pelosi\'s trip to davos on the us taxpayers dime',
         'back in 2019',
         'Rick Rule''s VIRTUAL URANIUM Investors Bootcamp',
-        'its a saturday marathon'
+        'its a saturday marathon',
+        'damn'
+        'so thats why starlink was deployed in ukraine',
+        'not to give the citizens access to tiktok',
+        'but to give the military access to remote into vehicles',
+        'just peeped that video',
+        'looks like theyre def gonna use peoples starlinks as some sort of mesh network around the jurisdiction',
+        'so that shit dont even gotta jump from orbit to the vehicle it can jump from some dudes roof top if its closer',
+        'star link bout to be the next cyberdyne systems'
+
     ]
     
     #can do this with isalpha or regex 
@@ -86,7 +95,6 @@ async def on_message(message):
     #without bot prefix
     #only chat if instance is a DM channel initiated by the user
     if isinstance(message.channel, discord.DMChannel):
-
         #true if any words are from user and are in triggerwords 
         #if any (element in message.content for element in triggerWords):
         if triggerWords.search(message.content):
