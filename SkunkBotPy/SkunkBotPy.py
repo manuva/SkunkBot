@@ -1,4 +1,5 @@
 #Updated: Now parses messages from stored SQL data
+from itertools import filterfalse
 import os
 import secrets
 import discord
@@ -23,24 +24,35 @@ cursor = CONN.cursor()
 bot = commands.Bot(command_prefix="!")
 client = discord.Client()
 
+
+
+
+
+
 ############
 ## EVENTS ##
 ############
 @client.event
 async def on_ready():
     reportBotInfo()
+        
+
+    
     
 @client.event
 async def on_message(message):
-    await SendRandomQuote(message)
-    
-    
+    await SendRandomQuote(message)    
+
 ###############
 ## FUNCTIONS ##
 ###############   
 async def SendRandomQuote(message):
     if message.author == client.user:
-            return
+        return
+    
+    
+        
+
     
     #select sql data
     skunkQuotes = cursor.execute('SELECT quote_text FROM Quotes').fetchall()
@@ -49,13 +61,16 @@ async def SendRandomQuote(message):
     
     #can probably do this with isalpha or regex. user input 
     msgUserInput = re.compile('[a-zA-Z]')
-    
+    msgUserNumInput = re.compile('[0-9]')
+
+
     #without bot prefix
     #only chat if instance is a DM channel initiated by the user
     if isinstance(message.channel, discord.DMChannel):
         #true if any words are from user and are in msgUserInput 
+        #if message starts with a-z
         #if any (element in message.content for element in msgUserInput):
-        if msgUserInput.search(message.content):
+        if msgUserInput.match(message.content):
             #store a random number 1-5
             randomNumber = secrets.choice(range(1, 5))
             #print('random number is ', randomNumber)
@@ -69,19 +84,35 @@ async def SendRandomQuote(message):
                     await message.channel.send(response)
                     msgCount += 1
                     #print('\n--message count is currently', msgCount)
-        else:
-            if isinstance(message.channel, discord.DMChannel):
-                response = 'i dono man'
-                async with message.channel.typing():
-                    time.sleep(secrets.choice(range(1,10)))
-                    await message.channel.send(response)                   
-    
-                       
+        elif message.content.startswith('!stocks'):
+            async with message.channel.typing():
+                helpResponse = 'invest in uranium'
+                time.sleep(secrets.choice(range(1,10)))
+                await message.channel.send(helpResponse)
+        elif message.content == '!name':
+            async with message.channel.typing():
+                nameResponse = 'my name is skunkbot, what is yours?'
+                time.sleep(3)
+                await message.channel.send(nameResponse)
+        elif not msgUserInput.match(message.content):
+            async with message.channel.typing():
+                time.sleep(secrets.choice(range(1,10))) 
+                await message.channel.send("i dono man")
+
+                    
+                
+
+
+                
+                
+                
 def reportBotInfo():
     '''for guild in client.guilds:
         if guild.name == GUILD:
             break'''
     guild = discord.utils.get(client.guilds, name=GUILD)
+    
+    
         
     print(
         f'{client.user} is connected to the following guild:\n'
@@ -94,34 +125,16 @@ def reportBotInfo():
     )
     
 
-'''
-@bot.command(name='hey', help='responds with a random quote')
+
+
+@bot.command(name='hey', help='here is a list of helpful commands')
 async def skunk_message(ctx):
     skunkQuotes = [
         'i dono man',
         'why group when you can solo'
     ]
-    
     response = random.choice(skunkQuotes)
-    await ctx.send(response)
- '''
-   
-'''
-        #store and make the response random
-        response = random.choice(skunkQuotes)
-        #indicate the bot is typing
-        async with message.channel.typing():
-            time.sleep(5) #implement a small delay before sending message
-            await message.channel.send(response) #if all are true above, tell the user a random message
-        async with message.channel.typing():
-            response=random.choice(skunkQuotes)
-            time.sleep(3)
-            await message.channel.send(response)
-        async with message.channel.typing():
-            response=random.choice(skunkQuotes)
-            time.sleep(3)
-            await message.channel.send(response)
-'''   
+    await ctx.send(response)  
 
 client.run(TOKEN)
-#bot.run(TOKEN)
+bot.run(TOKEN)
