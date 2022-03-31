@@ -1,6 +1,7 @@
 #Updated: Now parses messages from stored SQL data
 from itertools import filterfalse
 import os
+
 import secrets
 import discord
 import random
@@ -50,10 +51,6 @@ async def SendRandomQuote(message):
     if message.author == client.user:
         return
     
-    
-        
-
-    
     #select sql data
     skunkQuotes = cursor.execute('SELECT quote_text FROM Quotes').fetchall()
     #make it a list. updated from static list/array
@@ -84,9 +81,14 @@ async def SendRandomQuote(message):
                     await message.channel.send(response)
                     msgCount += 1
                     #print('\n--message count is currently', msgCount)
+        elif message.content.startswith('!song'):
+            async with message.channel.typing():
+                songResponse = 'https://soundcloud.com/bodeche/secondtonone'
+                time.sleep(secrets.choice(range(1,10)))
+                await message.channel.send(songResponse)
         elif message.content.startswith('!stocks'):
             async with message.channel.typing():
-                helpResponse = 'invest in uranium'
+                helpResponse = '$XLE $PICK $EINC $COPX $URNM'
                 time.sleep(secrets.choice(range(1,10)))
                 await message.channel.send(helpResponse)
         elif message.content == '!name':
@@ -98,6 +100,7 @@ async def SendRandomQuote(message):
             async with message.channel.typing():
                 time.sleep(secrets.choice(range(1,10))) 
                 await message.channel.send("i dono man")
+
 
                     
                 
@@ -119,7 +122,7 @@ def reportBotInfo():
         f'{guild.name}(id: {guild.id})'
         f"\n  ____  _                _    ____        _"
         f"\n / ___|| | ___   _ _ __ | | _| __ )  ___ | |_ "
-        f"\n \___ \| |/ / | | | '_ \| |/ /  _ \ / _ \| __|"
+        f"\n \___ \| |/ / | | | '_ \| |/ /  _ \ / _ \| __|          by [manuva]"
         f"\n  ___) |   <| |_| | | | |   <| |_) | (_) | |_ "
         f"\n |____/|_|\_\\\__,_|_| |_|_|\_\____/ \___/ \__|"
     )
@@ -127,14 +130,14 @@ def reportBotInfo():
 
 
 
-@bot.command(name='hey', help='here is a list of helpful commands')
+'''@bot.command(name='hey', help='here is a list of helpful commands')
 async def skunk_message(ctx):
     skunkQuotes = [
         'i dono man',
         'why group when you can solo'
     ]
     response = random.choice(skunkQuotes)
-    await ctx.send(response)  
-
+    await ctx.send(response) 
+     
+bot.run(TOKEN)'''
 client.run(TOKEN)
-bot.run(TOKEN)
