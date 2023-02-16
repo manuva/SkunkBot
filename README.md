@@ -1,2 +1,2 @@
 # SkunkBot
-a chatbot for discord
+a quick and dirty chatbot for discord
