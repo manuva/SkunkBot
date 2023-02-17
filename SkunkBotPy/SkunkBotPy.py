@@ -1,38 +1,51 @@
 #Updated: Now parses messages from stored SQL data
-from itertools import filterfalse
 import os
-
 import secrets
 import discord
 import random
 import time
 import pandas
+import openai
 import re
 #import pymssql #leave out unless using mysql
 import pyodbc
 #import requests for url text processing
 import requests
+import datetime as dt
+import dateparser
+import dateparser.search
+
+
+from itertools import filterfalse
 from re import X
 from ctypes.wintypes import MSG
 from discord.ext import commands
 from dotenv import load_dotenv
-
-from github import Github
-
 from dateutil.parser import parse
 from dateutil.tz import tzutc
-import datetime as dt
-
-import dateparser
-import dateparser.search
 from dateparser.search import search_dates
 
+
+try:
+    GHToken = ""
+    #CONN = pymssql.connect(DBSERVER, DBUSER, DBPASS, DBNAME)
+    #CONN = pyodbc.connect(os.getenv('SQL_CONNECTION_STRING'))
+    #cursor = CONN.cursor()
+except:
+    print('could not establish')
+
+
+
+
 load_dotenv()
-GHToken = ""
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
-#CONN = pymssql.connect(DBSERVER, DBUSER, DBPASS, DBNAME)
-CONN = pyodbc.connect(os.getenv('SQL_CONNECTION_STRING'))
+
+
+intents = discord.Intents.default()
+bot = commands.Bot(command_prefix="!", intents=intents)
+client = discord.Client(intents=intents)
+
 
 
 
@@ -43,9 +56,7 @@ bazFileContents = bazSession.get(BazLogFileURL)
 
 
 
-cursor = CONN.cursor()
-bot = commands.Bot(command_prefix="!")
-client = discord.Client()
+
 
 ##############
 ## COMMANDS ##
@@ -71,7 +82,6 @@ async def on_message(message):
             time.sleep(secrets.choice(range(1,5))) 
             #await message.channel.send("i dono man i couldnt connect")
             print("I couldnt recognize this input i dono")
-            await message.channel.send("if in the proper channel (bazaar): '!sold' for raid loot sold, '!allsales' for all loot ever sold")
         
         
 
@@ -140,12 +150,18 @@ async def UserMessageReceive(message):
                 soldResponse = ReportSoldLootList()
                 await message.channel.send(soldResponse)
         elif message.content == "!dates":
+            
             async with message.channel.typing():
                 time.sleep(secrets.choice(range(1,5)))
                 dateResponse = ParseWeeklySales()
                 #await message.channel.send(dateResponse)
                 #await message.channel.send('!dates recognized')
                 print(dateResponse)
+        elif message.content.startswith("!"):
+            async with message.channel.typing():
+                
+                return
+                
         elif message.content.startswith("$"):
             async with message.channel.typing():
                 
@@ -190,8 +206,7 @@ async def UserMessageReceive(message):
         elif message.content.startswith("?"):        
             async with message.channel.typing():
                 questionResponse = AnnounceNewSales(message.content.strip())
-                await message.channel.send(questionResponse)
-                
+                await message.channel.send(questionResponse)        
                     
         #message received doesnt match anything!
         elif not msgUserInput.match(message.content):
