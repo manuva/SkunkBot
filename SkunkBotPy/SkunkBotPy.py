@@ -76,12 +76,11 @@ async def on_ready():
 async def on_message(message):
     try:
         await UserMessageReceive(message)
-        
     except:
-        async with message.channel.typing():
-            time.sleep(secrets.choice(range(1,5))) 
+        #async with message.channel.typing():
+            #time.sleep(secrets.choice(range(1,5))) 
             #await message.channel.send("i dono man i couldnt connect")
-            print("I couldnt recognize this input i dono")
+            print("I couldnt recognize this input i donos")
         
         
 
@@ -140,73 +139,28 @@ async def UserMessageReceive(message):
                 time.sleep(3)
                 await message.channel.send(nameResponse)
         #reporting sales data
-        elif message.content.startswith('!allsales'):
-            async with message.channel.typing():
-                time.sleep(secrets.choice(range(1,5)))
-                ReportAllPurchases()
-        elif message.content == "!sold":
-            async with message.channel.typing():
-                time.sleep(secrets.choice(range(1,5)))
-                soldResponse = ReportSoldLootList()
-                await message.channel.send(soldResponse)
-        elif message.content == "!dates":
-            
-            async with message.channel.typing():
-                time.sleep(secrets.choice(range(1,5)))
-                dateResponse = ParseWeeklySales()
-                #await message.channel.send(dateResponse)
-                #await message.channel.send('!dates recognized')
-                print(dateResponse)
         elif message.content.startswith("!"):
             async with message.channel.typing():
-                
+               
+                msg = message.content.strip()
+                userInput = msg.strip('!')
                 return
                 
         elif message.content.startswith("$"):
             async with message.channel.typing():
                 
-                prev_line = ''
                 msg = message.content.strip()
                 userInput = msg.strip('$')
-                
                 print(userInput)
-                
-                
-                
-                for line in bazFileContents.text.splitlines():
-                    
-                    line = line.rstrip()
-                
-                    
-                    if 'purchased' in line:
-                        #timestamp1 = dt.datetime.strptime(line, "[%a %b %d %H:%M:%S %Y]")
-                        #timestamp2 = dt.datetime.strptime(line, "[%c]")
-                        #timestamp3 = search_dates(line)
-                        #print(timestamp3)
-                        
-                        if 'browsing' in prev_line:
-                            purchaseLines = prev_line + "\n" + line
-                            #print(purchaseLines)
-                            #timestampBrowse = search_dates(purchaseLines)
-                            #print(timestampBrowse)
-                            #print(timestampBrowse)
-                            if userInput.capitalize() in purchaseLines:
-                                print(purchaseLines)
-                                await message.channel.send("``` " + purchaseLines + " ```")
-                                print(userInput)
-                                
-                                
-                                
-                                
-                                
-                    prev_line = line
-                
-                
                 return
+
         elif message.content.startswith("?"):        
             async with message.channel.typing():
-                questionResponse = AnnounceNewSales(message.content.strip())
-                await message.channel.send(questionResponse)        
+                
+                msg = message.content.strip()
+                userInput = msg.strip('?')
+                print(userInput)
+                return
                     
         #message received doesnt match anything!
         elif not msgUserInput.match(message.content):
@@ -216,148 +170,23 @@ async def UserMessageReceive(message):
     #otherwise, message is in a CHANNEL with a specific id
     elif isinstance(message.channel, discord.TextChannel):
         #channel validations
-        if message.channel.id == 761447182183694348:
+        if message.channel.id == 761447182183694348 | message.channel.id == 1032451448753111200:
             #channel commands
-            if message.content == "!allsales":
-                async with message.channel.typing():
-                    time.sleep(secrets.choice(range(1,5)))
-                    salesResponse = ReportAllPurchases()
-                    await message.channel.send(salesResponse)
-            elif message.content == "!sold":
-                
-                
-                prev_line = ''
-                
-                for line in bazFileContents.text.splitlines():
-                    line = line.rstrip()
-            
-                    if ('purchased' in line and 'Aged' in line) | \
-                    ('purchased' in line and 'Reinforced' in line): # or if line == 'text'
-                        if 'browsing' in prev_line:
-                            #print(prev_line)
-                            #print(line)
-                            print(prev_line + "\n" + line)
-                            async with message.channel.typing():
-                                await message.channel.send("```\n" + prev_line + "\n" + line + "\n```")
-                            
-                            
-                    prev_line = line
-            elif message.content.startswith('$'):
+            if message.content.startswith('$'):
                 async with message.channel.typing():
 
-                    prev_line = ''
                     msg = message.content.strip()
                     userInput = msg.strip('$')
-
+                    print('message started with $')
                     print(userInput)
 
 
+                    return                 
 
-                    for line in bazFileContents.text.splitlines():
-                        
-                        line = line.rstrip()
-
-                        
-                        if 'purchased' in line:
-                            #timestamp1 = dt.datetime.strptime(line, "[%a %b %d %H:%M:%S %Y]")
-                            #timestamp2 = dt.datetime.strptime(line, "[%c]")
-                            #timestamp3 = search_dates(line)
-                            #print(timestamp3)
-                            
-                            if 'browsing' in prev_line:
-                                purchaseLines = prev_line + "\n" + line
-                                #print(purchaseLines)
-                                #timestampBrowse = search_dates(purchaseLines)
-                                #print(timestampBrowse)
-                                #print(timestampBrowse)
-                                if userInput.capitalize() in purchaseLines:
-                                    print(purchaseLines)
-                                    await message.channel.send("``` " + purchaseLines + " ```")
-                                    print(userInput)
-                                    
-                                    
-                                    
-                        prev_line = line
+             
 
 
-                    return
-            elif message.content == "!weeklysales":
-                async with message.channel.typing():
-                    time.sleep(secrets.choice(range(1,5)))
-                    latestResponse = ParseWeeklySales()
-                    await message.channel.send(latestResponse)                  
 
-
-#Displays 
-def ReportSoldLootList():
-    
-    prev_line = ''
-    
-    
-    for line in bazFileContents.text.splitlines():
-        line = line.rstrip()
-
-        if ('purchased' in line and 'Aged' in line) | \
-        ('purchased' in line and 'Reinforced' in line): # or if line == 'text'
-            if 'browsing' in prev_line:
-                #print(prev_line)
-                #print(line)
-                print(prev_line + "\n" + line)
-                print("```\n" + prev_line + "\n" + line + "\n```")
-                
-        prev_line = line
-                        
-def AnnounceNewSales(inputMessage):
-    prev_line = ''
-    userInput = inputMessage.strip('?')
-    
-    
-    
-    
-    for line in bazFileContents.text.splitlines():
-        line = line.rstrip()
-        
-        if 'purchased' in line:
-            #timestamp1 = dt.datetime.strptime(line, "[%a %b %d %H:%M:%S %Y]")
-            #timestamp2 = dt.datetime.strptime(line, "[%c]")
-            #timestamp3 = search_dates(line)
-            #print(timestamp3)
-            
-            if 'browsing' in prev_line:
-                purchaseLines = prev_line + "\n" + line
-                #print(purchaseLines)
-                #timestampBrowse = search_dates(purchaseLines)
-                #print(timestampBrowse)
-                #print(timestampBrowse)
-                if userInput in purchaseLines:
-                    print(purchaseLines)
-                    print(userInput)
-                
-        prev_line = line
-    
-    
-    return
-
-                        
-def ParseWeeklySales():
-    log_line = "[Sun Oct 09 06:14:26 2022] Wiladoc is browsing your wares."
-    _datetimeWeekly = log_line[1:25]
-    _datetime_strpWeekly = dt.datetime.strptime(_datetimeWeekly, '%a %b %d %H:%M:%S %Y')
-    displayDate = _datetimeWeekly
-    print(displayDate)
-    #print(_datetimeWeekly)
-    #print(_datetime_strpWeekly)
-    return 
-                                    
-def ReportAllPurchases():
-    AddAllPurchaseData()
-
-def FindLinesWith2Words(file, word1, word2):
-    """Print all lines in file that have both words in """
-    for line in file:
-        if re.search(r"\b" + word1 + r"\b", line) and \
-            re.search(r"\b" + word2 + r"\b", line):
-                print(line)
                 
 def BotLoadedInfoMsg():
     '''for guild in client.guilds:
@@ -389,88 +218,8 @@ def LogfileToSQL():
     
     
     return
-
-def FindTimestampFromLog():
-    
-    #this module, when provided with a text log file,
-    #should output a browsing message only when new browsing has
-    #been found after a certain date
-    
-    prev_line = ''
-    timestamps = []
-    
-    #go through each line in baz file
-    for line in bazFileContents.text.splitlines():
-        line = line.rstrip() #strip whitespaces
-        
-        #timestamp format is as follows:
-        # [Sun Oct 09 06:14:26 2022] Wiladoc is browsing your wares.
-        # [Sun Oct 09 06:14:38 2022]  purchased 1 Aged Nightfall for (1000p).
-        #file_dt = dt.datetime.strptime(line, '[ %a %b %m %H:%M:%S %Y ]')
-        #_datetime = line[1:25]
-        #file_dt = dt.datetime.strptime(_datetime, '%a %b %d %H:%M:%S %Y')
-    
-        #if purchased is found, get the timestamp of that line
-        if 'purchased' in line and 'for' in line: # or if line == 'text'
-            if 'browsing' in prev_line:
-                print(prev_line)
-                print(line)
-                #print(file_dt)
-                #print(_datetime + prev_line)
                 
 
-def AddAllPurchaseData():
-    #this should strip the values out of the file and add them all up
-    prev_line = ''
-    
-    for line in bazFileContents.text.splitlines():
-        line = line.rstrip()
-        if 'purchased' in line and 'for' in line:
-            result = line[line.find('(')+1:line.find(')')]
-            result = result.strip('p')
-            print(result)
-            print('\n\n ----Date last modified')
-            ##find new commits
-            #This program should search a github file for updates and display those updates  
-            
-        prev_line = line
-    
-    return
-
-def LoadBazFile():
-    try:
-        #result = re.findall('purchased', response.text)
-        #lineCount = 0
-        #print(result)
-        #for line in response.text.splitlines():
-        #    if "purchased" in line:
-        #        lineCount += 1
-        #        purchased = print(line)
-
-        #    else:
-        #        print('nothing found')
-        
-        
-        #BazLogFilePath = open('G:\D Drive\Games\Project Lazarus\Logs\bzrlog_Project Lazarus_Bigpoppapizzaco.txt')
-        BazLogFileURL = 'https://raw.githubusercontent.com/manuva/EQLogs/master/bzrlog_Project%20Lazarus_Bigpoppapizzaco.txt'
-        response = requests.get(BazLogFileURL)
-        
-        
-        prev_line = ''
-        
-        for line in response.text.splitlines():
-            line = line.rstrip()
-            
-            if 'purchased' in line and 'for' in line: # or if line == 'text'
-                if 'browsing' in prev_line:
-                    print(prev_line)
-                    print(line)
-             
-            prev_line = line
-         
-           
-    except:
-        print('baz file parsing failed')
 '''@bot.command(name='hey', help='here is a list of helpful commands')
 async def skunk_message(ctx):
     skunkQuotes = [
