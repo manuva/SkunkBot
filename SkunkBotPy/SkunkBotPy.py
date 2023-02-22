@@ -36,7 +36,6 @@ except:
 
 
 
-
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
@@ -47,30 +46,22 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 client = discord.Client(intents=intents)
 
 
-
-
 BazLogFileURL = 'https://raw.githubusercontent.com/manuva/EQLogs/master/bzrlog_Project%20Lazarus_Bigpoppapizzaco.txt'
 #bazFileContents = requests.get(BazLogFileURL)
 bazSession = requests.Session()
 bazFileContents = bazSession.get(BazLogFileURL)
 
 
-
-
-
 ##############
 ## COMMANDS ##
 ##############
 
-
-
-############
-## EVENTS ##
-############
+################
+#### EVENTS ####
+################
 @client.event
 async def on_ready():
-    BotLoadedInfoMsg()
-    
+    BotLoadedInfoMsg()    
     
 @client.event
 async def on_message(message):
@@ -82,8 +73,6 @@ async def on_message(message):
             #await message.channel.send("i dono man i couldnt connect")
             print("I couldnt recognize this input i donos")
         
-        
-
 ###############
 ## FUNCTIONS ##
 ###############   
@@ -91,16 +80,16 @@ async def on_message(message):
 async def UserMessageReceive(message):
     if message.author == client.user:
         return
-    
+
     #select sql data
     skunkQuotes = cursor.execute('SELECT quote_text FROM Quotes').fetchall()
     #make it a list. updated from static list/array
     skunkQuoteText = [row[0] for row in skunkQuotes]
-    
+
     #can probably do this with isalpha or regex. user input 
     msgUserInput = re.compile('[a-zA-Z]')
     msgUserNumInput = re.compile('[0-9]')
-
+    
 
     #without bot prefix
     #only chat if instance is a DM CHANNEL initiated by the user
@@ -144,8 +133,8 @@ async def UserMessageReceive(message):
                
                 msg = message.content.strip()
                 userInput = msg.strip('!')
-                return
-                
+                return               
+
         elif message.content.startswith("$"):
             async with message.channel.typing():
                 
@@ -161,7 +150,7 @@ async def UserMessageReceive(message):
                 userInput = msg.strip('?')
                 print(userInput)
                 return
-                    
+        
         #message received doesnt match anything!
         elif not msgUserInput.match(message.content):
             async with message.channel.typing():
@@ -175,19 +164,12 @@ async def UserMessageReceive(message):
             if message.content.startswith('$'):
                 async with message.channel.typing():
 
-                    msg = message.content.strip()
+                    msg = message.content.strip() 
                     userInput = msg.strip('$')
                     print('message started with $')
                     print(userInput)
-
-
                     return                 
-
-             
-
-
-
-                
+                             
 def BotLoadedInfoMsg():
     '''for guild in client.guilds:
         if guild.name == GUILD:
@@ -217,8 +199,7 @@ def LogfileToSQL():
     
     
     
-    return
-                
+    return            
 
 '''@bot.command(name='hey', help='here is a list of helpful commands')
 async def skunk_message(ctx):
